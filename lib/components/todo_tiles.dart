@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+
+import '../pages/utilities/Forms/confirm_delete_dialog.dart';
 
 class TodoTile extends StatelessWidget {
   final String taskName;
@@ -16,14 +19,24 @@ class TodoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) { 
     return Padding(
-      padding: const EdgeInsets.only(left:25.0, right:25, top:25 ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: () {
-          if (onChanged != null) {
-            onChanged!(!taskCompleted);
-          }
-        },
+      padding: const EdgeInsets.only(left:25.0, right:25, top:25),
+      child: Slidable(
+        endActionPane: ActionPane(
+          motion: const StretchMotion(),
+          children: [
+            SlidableAction(
+              onPressed: (context) {
+                if (onDelete != null) {
+                  onDelete!();
+                }
+              },
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+              icon: Icons.delete,
+              label: 'Delete',
+            ),
+          ],
+        ),
         child: Material(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
@@ -41,24 +54,6 @@ class TodoTile extends StatelessWidget {
                       fontSize: 16,
                     ),
                   ),
-                ),
-                PopupMenuButton<String>(
-                  onSelected: (value) {
-                    if (value == 'delete' && onDelete != null) {
-                      onDelete!();
-                    }
-                  },
-                  itemBuilder: (context) => [
-                    PopupMenuItem(
-                      value: 'delete',
-                      height: 35,
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: const Text(
-                        'Delete',
-                        style: TextStyle(fontSize: 14),
-                      ),
-                    ),
-                  ],
                 ),
               ],
             ),
